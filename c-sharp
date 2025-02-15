@@ -1,0 +1,64 @@
+using System;  
+using System.Diagnostics;  
+using System.Linq;  
+
+class Program  
+{  
+    static void Main()  
+    {  
+        int iterations = 100000000; // Adjust this number to increase/decrease the workload  
+        int testRuns = 10; // Number of times to run each test  
+        long[] timesNPlusPlus = new long[testRuns];  
+        long[] timesNEqualsNPlus1 = new long[testRuns];  
+
+        for (int run = 0; run < testRuns; run++)  
+        {  
+            int n1 = 0, n2 = 0;  
+            Stopwatch stopwatch = new Stopwatch();  
+
+            // Test n++  
+            stopwatch.Start();  
+            for (int i = 0; i < iterations; i++)  
+            {  
+                n1++;  
+            }  
+            stopwatch.Stop();  
+            timesNPlusPlus[run] = stopwatch.ElapsedMilliseconds;  
+
+            // Reset n1 and stopwatch  
+            n1 = 0;  
+            stopwatch.Reset();  
+
+            // Test n = n + 1  
+            stopwatch.Start();  
+            for (int i = 0; i < iterations; i++)  
+            {  
+                n2 = n2 + 1;  
+            }  
+            stopwatch.Stop();  
+            timesNEqualsNPlus1[run] = stopwatch.ElapsedMilliseconds;  
+        }  
+
+        // Calculate averages  
+        double avgNPlusPlus = timesNPlusPlus.Average();  
+        double avgNEqualsNPlus1 = timesNEqualsNPlus1.Average();  
+
+        // Print results  
+        Console.WriteLine($"Average time taken for 'n++': {avgNPlusPlus} ms");  
+        Console.WriteLine($"Average time taken for 'n = n + 1': {avgNEqualsNPlus1} ms");  
+
+        // Compare results  
+        if (avgNPlusPlus < avgNEqualsNPlus1)  
+        {  
+            Console.WriteLine("On average, 'n++' is faster.");  
+        }  
+        else if (avgNPlusPlus > avgNEqualsNPlus1)  
+        {  
+            Console.WriteLine("On average, 'n = n + 1' is faster.");  
+        }  
+        else  
+        {  
+            Console.WriteLine("On average, both methods are equally fast.");  
+        }  
+    }  
+}
